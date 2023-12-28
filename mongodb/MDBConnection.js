@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-const url = `mongodb+srv://mohammedsaifimulla:yNN5FV5hGGb69HCh@cluster0.yyrlkhp.mongodb.net/i_chat?retryWrites=true&w=majority`;
+require('dotenv').config();
+const url = process.env.MONGO_DB_URI;
+// const url = `mongodb+srv://mohammedsaifimulla:yNN5FV5hGGb69HCh@cluster0.yyrlkhp.mongodb.net/i_chat?retryWrites=true&w=majority`;
 const initializeSchema =  require("./Schemas");
 
 class MDBConnection {
