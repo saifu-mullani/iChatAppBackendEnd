@@ -89,7 +89,11 @@ const MongoProjectDao ={
 
                 console.log("data",JSON.stringify(data))
                 let result = await mongoose.model('i_chat_users').insertMany(data)
-                return result
+                return { status      :   "success",
+                statusCode  :   200,
+                result      :   result,
+                error       :   ""}
+                
 
             } catch (error) {
                 console.log("Error",error)

@@ -118,6 +118,17 @@ const userService = {
     },
     forgotPassword : async function(filter = {}){
         try {
+
+            let data = await UsersDao.fetchUser(filter)
+
+            if(data.length === 0 ){
+                throw { 
+                    status      :   "fail",
+                    statusCode  :   400,
+                    result      :   [],
+                    error       :   `Please check User Id`
+                }
+            }
         
             let generateOtpResp = await this.generateOtp();
             console.log("generateOtpResp",generateOtpResp)
@@ -223,6 +234,15 @@ const userService = {
             }
             let registerUser = await UsersDao.addUser([obj])
 
+            if(registerUser.status === "fail"){
+                throw {
+                    status      :  registerUser.status || "fail",
+                    statusCode  :   registerUser.statusCode || 400,
+                    result      :  [],
+                    error       :   registerUser.error || "Error in Registration"
+                }
+            }
+
             const templatePath = './modules/mail/emailTemplates/user-registered-email-template.html';
              const htmlTemplate = fs.readFileSync(templatePath, 'utf-8');
 
@@ -248,7 +268,7 @@ const userService = {
         } catch (error) {
             console.log("error userService",error)
             throw {
-                status      :   error.statusCode || "fail",
+                status      :   error.status || "fail",
                 statusCode  :   error.statusCode || 500,
                 result      :   [],
                 error       :   error.error || error || "Something went wrong"
