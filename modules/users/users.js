@@ -10,7 +10,29 @@ const userService = {
         try {
           
             let data = await UsersDao.fetchUser(filter)
- 
+            console.log("data",data)
+            return  {
+                status      :   "success",
+                statusCode  :   200,
+                result      :  data,
+                error       :   ""
+            }
+        } catch (error) {
+            console.log("error",error)
+            throw {
+                status      :   error.status || "fail",
+                statusCode  :   error.statusCode || 500,
+                result      :   [],
+                error       :   error.error || error || "Something went wrong"
+            }
+        }
+    },
+
+    fetchUsersAllData : async(filter={})=>{
+        try {
+          
+            let data = await UsersDao.fetchUserAllData(filter)
+            console.log("data",data)
             return  {
                 status      :   "success",
                 statusCode  :   200,
@@ -203,7 +225,7 @@ const userService = {
              const htmlTemplate = fs.readFileSync(templatePath, 'utf-8');
 
                 // Replace placeholders with actual data
-            const replacedTemplate = htmlTemplate.replace('{{name}}', `${first_name} ${last_name}`).replace('{{user_id}}', `${first_name}_${last_name}`);
+            const replacedTemplate = htmlTemplate.replace('{{name}}', `${first_name} ${last_name}`).replace('{{user_id}}', `${first_name}_${last_name}`.toLowerCase());
 
                 // Email content
             const mailOptions = {

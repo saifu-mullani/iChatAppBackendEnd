@@ -13,7 +13,7 @@ router.get('/',async(req,res)=>{
         active_status ? filter["active_status"] = active_status  : ""
         user_id ? filter["user_id"]=user_id :""
         console.log("filter",filter)
-        let fetchUsersResp =  await userService.fetchUsers(filter)
+        let fetchUsersResp =  await userService.fetchUsersAllData(filter)
         res.status(fetchUsersResp.statusCode || 200 ).send(fetchUsersResp)
         
     } catch (error) {

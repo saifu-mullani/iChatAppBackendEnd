@@ -22,6 +22,36 @@ const MongoProjectDao ={
  
     },
 
+    fetchUserAllData : async(filter={})=>{
+      
+        try {
+
+            let result = await mongoose.model('i_chat_users').find(filter,{
+                first_name: true,
+                  last_name: true,
+                  user_id: true,
+                  mobile: true,
+                  user_id: true,
+                  active_status: true,
+                  last_login: true,
+                  age: true,
+                  email: true,
+            })
+            // console.log("result",result)
+            return result
+
+        } catch (error) {
+            console.log("Error",error)
+            throw {
+                status      :   "fail",
+                statusCode  :   500,
+                result      :   [],
+                error       :   "Error While fetching users"
+            }
+        }
+
+},
+
     updateUser : async(filter, data)=>{
        
         try {
