@@ -210,13 +210,15 @@ const userService = {
                 }
             }
 
+            let user_id = `${first_name}_${last_name}`.toLowerCase()
+            console.log("user_id",user_id)
             let obj =   {
                 first_name,
                 last_name,
                 mobile,
                 email,
                 age,
-                user_id     :   `${first_name}_${last_name}`.toLowerCase(),
+                user_id,
                 password     :   hashPwd.result
             }
             let registerUser = await UsersDao.addUser([obj])
@@ -225,7 +227,7 @@ const userService = {
              const htmlTemplate = fs.readFileSync(templatePath, 'utf-8');
 
                 // Replace placeholders with actual data
-            const replacedTemplate = htmlTemplate.replace('{{name}}', `${first_name} ${last_name}`).replace('{{user_id}}', `${first_name}_${last_name}`.toLowerCase());
+            const replacedTemplate = htmlTemplate.replace('{{name}}', `${first_name} ${last_name}`).replace('{{user_id}}', user_id);
 
                 // Email content
             const mailOptions = {
