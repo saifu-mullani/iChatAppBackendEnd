@@ -6,12 +6,14 @@ const app = express();
 const notifier = require('node-notifier');
 const userService = require("./modules/users/users")
 const server = http.createServer(app)
-const io = socketIO(server,{
-    cors: {
-      origin: 'http://localhost:8000', // Replace with the actual origin of your React app
-      methods: ['GET', 'POST'],
-    },
-  })
+const io = socketIO(server
+//     ,{
+//     // cors: {
+//     //   origin: 'http://localhost:8000', // Replace with the actual origin of your React app
+//     //   methods: ['GET', 'POST'],
+//     // },
+//   }
+  )
 const db = require('./mongodb/MDBConnection')
 
 const cors = require("cors")
