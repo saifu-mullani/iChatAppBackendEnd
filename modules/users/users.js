@@ -10,7 +10,6 @@ const userService = {
         try {
           
             let data = await UsersDao.fetchUser(filter)
-            console.log("data",data)
             return  {
                 status      :   "success",
                 statusCode  :   200,
@@ -32,7 +31,6 @@ const userService = {
         try {
           
             let data = await UsersDao.fetchUserAllData(filter)
-            console.log("data",data)
             return  {
                 status      :   "success",
                 statusCode  :   200,
@@ -63,9 +61,7 @@ const userService = {
                     error       :   `Not registered. Please Register first`
                 }
             }
-            console.log("password",password)
             let decryptPasswordResp = await middlewares.decryptPassword(password,data[0].password)
-            console.log("decryptPasswordResp",decryptPasswordResp)
             if(decryptPasswordResp.status === "fail"){
                 throw  {
                     status      :   decryptPasswordResp.status,
@@ -131,13 +127,10 @@ const userService = {
             }
         
             let generateOtpResp = await this.generateOtp();
-            console.log("generateOtpResp",generateOtpResp)
-
+        
             let updateUserResp = await UsersDao.updateUser(filter,{forgot_password_otp : generateOtpResp})
-            console.log("updateUserResp",updateUserResp)
             if(updateUserResp.status === "success"){
                 // send email with OTP to user's registered Email Id
-                console.log("Here")
                 const templatePath = './modules/mail/emailTemplates/forgot-password-email-template.html';
                 const htmlTemplate = fs.readFileSync(templatePath, 'utf-8');
 
@@ -151,7 +144,6 @@ const userService = {
                 html: replacedTemplate
                 };
                 let resp = await sendMail(mailOptions)
-                console.log("resp",resp)
                 if(resp.status === "success"){
                     return  {
                         status      :   "success",
@@ -191,7 +183,6 @@ const userService = {
     },
     registerUser : async(body)=>{
         try {
-            console.log("registerUser")
             let {
                 first_name,
                 last_name,
@@ -222,7 +213,6 @@ const userService = {
             }
 
             let user_id = `${first_name}_${last_name}`.toLowerCase()
-            console.log("user_id",user_id)
             let obj =   {
                 first_name,
                 last_name,
@@ -256,9 +246,7 @@ const userService = {
                 html: replacedTemplate
             };
             let resp = await sendMail(mailOptions)
-            console.log("resp",resp)
                 
-
             return  {
                 status      :   "success",
                 statusCode  :   200,

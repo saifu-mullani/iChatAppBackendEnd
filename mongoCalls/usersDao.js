@@ -56,7 +56,6 @@ const MongoProjectDao ={
        
         try {
 
-            console.log("data",JSON.stringify(data))
             let result = await mongoose.model('i_chat_users').findOneAndUpdate(filter,data,{ returnDocument: 'after' })
             if(result === null){
                 return { status      :   "fail",
@@ -87,7 +86,6 @@ const MongoProjectDao ={
        
             try {
 
-                console.log("data",JSON.stringify(data))
                 let result = await mongoose.model('i_chat_users').insertMany(data)
                 return { status      :   "success",
                 statusCode  :   200,

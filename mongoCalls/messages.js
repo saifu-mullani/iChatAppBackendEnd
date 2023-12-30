@@ -29,9 +29,7 @@ const MongoProjectDao ={
       
         try {
 
-            console.log(filter)
             let filt = {$or:[{user1_id:filter.user_id},{user2_id:filter.user_id}]}
-            console.log(filt)
             let result = await mongoose.model('i_chat_messages').find(filt)
          
             return result

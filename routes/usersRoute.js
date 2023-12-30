@@ -12,7 +12,6 @@ router.get('/',async(req,res)=>{
         let {active_status,user_id} = req.query
         active_status ? filter["active_status"] = active_status  : ""
         user_id ? filter["user_id"]=user_id :""
-        console.log("filter",filter)
         let fetchUsersResp =  await userService.fetchUsersAllData(filter)
         res.status(fetchUsersResp.statusCode || 200 ).send(fetchUsersResp)
         
@@ -74,7 +73,6 @@ router.post('/register',async(req,res)=>{
   router.post('/forgotPassword',async(req,res)=>{
     try {
  
-        console.log("forgotPassword")
         let {user_id} = req.body;
         
         let logoutUserResp =  await userService.forgotPassword({"user_id" : user_id})
@@ -90,16 +88,13 @@ router.post('/register',async(req,res)=>{
   router.post('/validateOtp',async(req,res)=>{
     try {
  
-        console.log("validateOtp",req.body)
         let {user_id,otp} = req.body;
         let fetchUsersResp =  await userService.fetchUsers({"user_id" : user_id })
-        console.log("fetchUsersResp",fetchUsersResp)
         if(fetchUsersResp.status === "success"){
             if(fetchUsersResp.result[0].forgot_password_otp ===  otp){
                 
                 let resetPasswordResp =  await userService.resetPassword(req.body)
-                console.log("resetPasswordResp",resetPasswordResp)
-
+    
                 return  res.status(200).send({
                     status      :   "success",
                     statusCode  :   200,

@@ -10,6 +10,7 @@ const io = socketIO(server
     ,{
     cors: {
       origin: 'https://ichatapp-d54s.onrender.com', // Replace with the actual origin of your React app
+    //   origin: 'http://localhost:8000', // Replace with the actual origin of your React app
       methods: ['GET', 'POST'],
     },
   }
@@ -32,16 +33,7 @@ app.use("/users",usersRoutes)
 app.use("/groups",groupsRoutes)
 app.use("/messages",messagesRoutes)
 
-
-app.get('/chatApp', (req, res) => {
-    res.sendFile(__dirname+"/index.html")
-});
-
-
-
-
 let userNames = {}
-
 
 app.get('/activeUsers', (req, res) => {
     res.status(200).send({
@@ -56,33 +48,6 @@ app.get('/activeUsers', (req, res) => {
 io.on('connection',(socket)=>{
     console.log("A User is connected")
 
-    // socket.on("userJoined",(data)=>{
-    //     console.log("userJoined Server",JSON.stringify(data))
-
-    //     let unique_id = data.type === "Private" ?  [data.sender , data.receiver].sort().join("_") : data.receiver
-    //     userNames[socket.id] = {sender :data.sender, receiver:data.receiver , unique_id }
-    //     socket.join(unique_id) 
-    //     socket.broadcast.to(unique_id).emit("userJoined",{from:"system",message:`${data.sender} joined`}) 
-
-    // })    
-
-    // socket.on("privateMessage",(data)=>{
-    //     let {sender = "" , receiver = "" ,unique_id = ""} = userNames[socket.id] || {}
-    //     socket.broadcast.to(unique_id).emit("privateMessage",{from:sender, message:data.message})
-    //     notifier.notify({
-    //         title: 'New Message',
-    //         message: `${sender} : ${data.message} `,
-    //         icon: 'path/to/your/icon.png', // Replace with the path to your notification icon
-    //     });
-    // })
-
-    // socket.on('disconnect',()=>{
-    //     console.log("A User is Disconnected",socket.id)
-    //     let {sender = "" , receiver = "" ,unique_id = ""} = userNames[socket.id] || {}
-    //     console.log("disconnect",sender, receiver ,unique_id )
-    //     socket.broadcast.to(unique_id).emit("userLeft",{from:"system",message:`${sender} Left`}) 
-    // })
-
     socket.on("userJoined",(data)=>{
      
         userNames[data.sender] = socket.id
@@ -93,19 +58,21 @@ io.on('connection',(socket)=>{
     })    
 
     socket.on('disconnect',async()=>{
-        console.log("A User is Disconnected",socket.id)
+      
         let uId = Object.entries(userNames).find((curr)=>{
             if(curr[1] === socket.id){
                 return true
             }
             return false 
         })
+        console.log("A User is Disconnected , socketid , uid",socket.id,uId)
         uId && uId.length && delete userNames[uId[0]] && await userService.logoutUser({"user_id" : uId[0]})
     })
 
     socket.on("privateMessage",(data)=>{
         let {sender ,receiver} = data
         let receiverSocketId = userNames[receiver]
+        console.log("receiverSocketId",receiverSocketId)
         socket.broadcast.to(receiverSocketId).emit("privateMessage",{sender:sender, message:data.message})
     })
 

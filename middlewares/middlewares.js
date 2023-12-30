@@ -8,10 +8,7 @@ const middlewares = {
     bcryptPassword : async (password)=>{
         try {
 
-            console.log("bcryptPassword")
-        
             let hashValue = await bcrypt.hash(password, saltRounds);
-            console.log("hashValue",hashValue)
             return {
                 status      :   "success",
                 statusCode  :   200,
@@ -31,10 +28,9 @@ const middlewares = {
     decryptPassword : async (loginPassword,storedHashedPassword)=>{
         try {
 
-            console.log("decryptPassword",loginPassword,storedHashedPassword)
-
+            
             let compareResp = await  bcrypt.compare(loginPassword, storedHashedPassword);
-            console.log("compareResp",compareResp)
+            
             if(compareResp){
                 return {
                     status      :   "success",

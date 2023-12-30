@@ -21,7 +21,6 @@ const transporter = nodemailer.createTransport({
 
 const sendMail = (mailOptions)=>{
    return new Promise((resolve, reject) => {
-    console.log("sendMail")
       mailOptions.from = 'MyChatAppEmailService@gmail.com'
       // Send email
       transporter.sendMail(mailOptions, function(error, info) {

@@ -8,7 +8,6 @@ const GroupsDao ={
             try {
 
                 let result = await mongoose.model('i_chat_groups').find(filter)
-                // console.log("result",result)
                 return result
 
             } catch (error) {

@@ -45,7 +45,6 @@ router.post('/sendMessages',async(req,res)=>{
     try {
 
      
-        console.log("fetchOldChatUser")
         let user_id = req.body.user_id;
 
         let filter = {}

@@ -31,9 +31,6 @@ const messageService = {
           
           
             let data = await MessagesDao.fetchMessages(filter)
-
-            console.log(data)
- 
             return  {
                 status      :   "success",
                 statusCode  :   200,
@@ -63,7 +60,6 @@ const messageService = {
                 uniqueUsers[curr.user2_id] = 1;
             })
            let data2 = Object.keys(uniqueUsers).filter((curr)=>curr !== filter.user_id)
-            console.log(uniqueUsers,data2)
             return  {
                 status      :   "success",
                 statusCode  :   200,
