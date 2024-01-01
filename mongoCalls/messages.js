@@ -9,7 +9,6 @@ const MongoProjectDao ={
             try {
 
                 let filt = {$or:[{user1_id:filter.user1_id,user2_id:filter.user2_id},{user1_id:filter.user2_id,user2_id:filter.user1_id}]}
-        
                 let result = await mongoose.model('i_chat_messages').find(filt)
              
                 return result
@@ -61,7 +60,7 @@ const MongoProjectDao ={
                         user1_id:messageObj.sender,
                         user2_id:messageObj.receiver
                     },
-                    $push: { messages: { $each: [{ message: messageObj.message, sender : messageObj.sender, timestamp: messageObj.timestamp }], $position: 0 } } },
+                    $push: { messages: { $each: [{ messageId : new mongoose.Types.ObjectId() , message: messageObj.message, sender : messageObj.sender, timestamp: messageObj.timestamp }], $position: 0 } } },
                 
                 { upsert: true, returnDocument: 'after' })
               
