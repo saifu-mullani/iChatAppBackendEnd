@@ -1,4 +1,5 @@
 const MessagesDao = require("../../mongoCalls/messages")
+const GroupsDao = require("../../mongoCalls/groupsDao")
 const middlewares   = require("../../middlewares/middlewares");
 
 
@@ -53,17 +54,22 @@ const messageService = {
           
           
             let data = await MessagesDao.fetchOldChatUser(filter)
+            let groupDataResp = await GroupsDao.fetchGroups({ "group_members": { $in: [filter.user_id] } })
             let uniqueUsers = {}
 
-            data.forEach((curr)=>{
-                uniqueUsers[curr.user1_id] = 1;
-                uniqueUsers[curr.user2_id] = 1;
+            groupDataResp.length && groupDataResp.forEach((curr)=>{
+                uniqueUsers[curr.group_name] = {name:curr.group_name , type : "Group"};
             })
-           let data2 = Object.keys(uniqueUsers).filter((curr)=>curr !== filter.user_id)
-            return  {
+            data.forEach((curr)=>{
+                uniqueUsers[curr.user1_id] = {name:curr.user1_id , type : "Individual"};
+                uniqueUsers[curr.user2_id] = {name:curr.user2_id , type : "Individual"};
+            })
+           let data3 = Object.values(uniqueUsers).filter((curr)=> curr.name !== filter.user_id)
+           
+           return  {
                 status      :   "success",
                 statusCode  :   200,
-                result      :  data2,
+                result      :   data3,
                 error       :   ""
             }
         } catch (error) {

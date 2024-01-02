@@ -49,15 +49,19 @@ const MongoProjectDao ={
       
         try {
 
-
-          
+            let filter = {}
+            if(messageObj.type === "Individual"){
+                filter  = {$or:[{user1_id:messageObj.sender,user2_id:messageObj.receiver},{user1_id:messageObj.receiver,user2_id:messageObj.sender}]}
+            }
+            else{
+                filter = {$or:[{user1_id:messageObj.receiver,user2_id:messageObj.receiver}]}
+            }
             
-
             let result = await mongoose.model('i_chat_messages').findOneAndUpdate( 
-                {$or:[{user1_id:messageObj.sender,user2_id:messageObj.receiver},{user1_id:messageObj.receiver,user2_id:messageObj.sender}]},
+                filter,
                 { 
                     $setOnInsert: {
-                        user1_id:messageObj.sender,
+                        user1_id:messageObj.type === "Individual" ? messageObj.sender : messageObj.receiver,
                         user2_id:messageObj.receiver
                     },
                     $push: { messages: { $each: [{ messageId : new mongoose.Types.ObjectId() , message: messageObj.message, sender : messageObj.sender, timestamp: messageObj.timestamp }], $position: 0 } } },

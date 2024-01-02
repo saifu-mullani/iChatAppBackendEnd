@@ -21,6 +21,24 @@ const GroupsDao ={
             }
  
     },
+    createGroup : async(data)=>{
+      
+        try {
+
+            let result = await mongoose.model('i_chat_groups').insertMany([data])
+            return result
+
+        } catch (error) {
+            console.log("Error",error)
+            throw {
+                status      :   "fail",
+                statusCode  :   500,
+                result      :   [],
+                error       :   "Error While creating group"
+            }
+        }
+
+},
 
 }
 
