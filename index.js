@@ -55,7 +55,20 @@ io.on('connection',(socket)=>{
         // socket.join(unique_id) 
         // socket.broadcast.to(unique_id).emit("userJoined",{from:"system",message:`${data.sender} joined`}) 
 
-    })    
+    })   
+    
+    socket.on('joinGroup', (groupNames) => {
+        console.log("joinGroup",groupNames)
+            socket.join(groupNames);
+
+    });
+
+    // Handle group messages
+    socket.on('groupMessage', (data) => {
+        console.log("groupMessage data",data)
+        const {sender ,receiver, message } = data;
+        io.to(receiver).emit('groupMessage',{sender,receiver, message} ); // Broadcast to members of the specified group
+    });
 
     socket.on('disconnect',async()=>{
       
@@ -70,10 +83,11 @@ io.on('connection',(socket)=>{
     })
 
     socket.on("privateMessage",(data)=>{
+        console.log("privateMessage",data)
         let {sender ,receiver} = data
         let receiverSocketId = userNames[receiver]
         console.log("receiverSocketId",receiverSocketId)
-        socket.broadcast.to(receiverSocketId).emit("privateMessage",{sender:sender, message:data.message})
+        socket.broadcast.to(receiverSocketId).emit("privateMessage",{sender:sender,receiver, message:data.message})
     })
 
 })
