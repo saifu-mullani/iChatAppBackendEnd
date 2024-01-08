@@ -10,7 +10,7 @@ const io = socketIO(server
     ,{
     cors: {
       origin: 'https://ichatappgroup.onrender.com', // Replace with the actual origin of your React app
-    //   origin: 'http://localhost:8000', // Replace with the actual origin of your React app
+     //   origin: 'http://localhost:8000', // Replace with the actual origin of your React app
       methods: ['GET', 'POST'],
     },
   }
